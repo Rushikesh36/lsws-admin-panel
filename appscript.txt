@@ -1,0 +1,139 @@
+function getFirestore() {
+  var email = "firebase-writer-account@wani-samaj.iam.gserviceaccount.com";
+  var key = "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCbDy3Zd3UbfFwz\nmQJIbMOUm4+4exjJ2jkJIWyyI/6CLOJkPS1CVQtDxw3kVA5iKKKespufTVi3vfpR\nEEoXG596oGHd/Q/sPFxWYS0HbYJi0LV+rX7cnOI5uXAcd4R6M4f1hdSX0gqtskW1\nxhGpoDPrR7DmaAN5QPHYcQhD82gZI6jRG5wDEuJ8X4M6+bbpTd0pFaD/ISkN2d/Q\nL771SZfC7Q5G8/91ksWn/W6FImUlygAT3NU85ac+WGsgo6N0Qx7sTdV6VRy+v1kL\nt6tuEwDlEsg/hLz9W4xiyxItgdkq+iMzBpvSyW6acOnZpCFUUwpwkmDEcj0moXkH\nGNqAhJ+tAgMBAAECggEAJI2f/9+G1ltrOuirnpoxQwOnDlTKg68zeeEMyDPvCA3/\nsqSvWi9FMA2pSzW7jE1LBMFTKWso6mvZKin+ZVMoNdbAK35ANi8Gj4BqBpG8xoGv\n/3Rz7xr2w6fg830DWHF0cB9D/iRQSyE3CMJwIH45LxJf8/j6NKfoO19uFOK5HA+r\netWJfTqbYzNQyjYYPXGjDd1TECZxq0sFbeFEOUfQ9Ru+oTCj50gr6Gf7y/7T/pMI\n5XyvvxUWGN538QTgLgCWIr4hLS/91a9aVsbI0i2M0vlOuVmUnjISRpifxcQhoqoQ\nQgmVz0MqlU9CS/eopWDKzOPJJZNwe6vmWJUI2OvOGwKBgQDOPG+6Is6RKhmW7Nvw\n3v/98GLboNbUipjS7MBeq32Neof6zHgo7osDQpBgtKoPWOi53yV69NYWCJdRREAW\nvsGodHRlHRh4+EYecXXYH9liLNNiV7Wp4GPoictADw3bWcbXq6hRTE7dHOTWe70u\nLPbhalX4qu+pHxIvkpyPUcxbRwKBgQDAeXaHjEV3pJkwJIs2M+Wv+MXYKMTNh1PD\nOkR7j9i2XVxn7dtjVVO2sCi1CDF7RFd8Zet4V/AQgJm1bfw3EYHCPON09ydlgHpw\nKc9ul9CqM9EtvQ2NhTLSF5HY20VqHVQWrT3upYPXhCDMiLp1CbmyEqEFD/bZihFg\n7Uic1zw/awKBgFhawg7/jHnajH4BWbTXBNsZGnE3dfI2soRi04N7et2a6hjDcpMu\npzWtVcdofxb2IzZGaHtF21YzNgil8cMM1FDEG32aOnrQ+tFeEHuYIXyS8bjHFNgD\nfyoHpqD6EhiwXKTXMNQrmfnWwB83gfP/ZYFrGgvfx68v1Y22BQbNp3xPAoGAU0W5\ntFdJzsOVyzBkUmUNoJ6e6jBpRQqhgLt62YKYnf2ydvx/iHBoMYfxdLFAxzYAK7/k\nqkJRiLI6zjXxgtm+LA0v03ECyHVXg6NzLUPdcWXNwF4kuO/B1wd/gDUNySU7Njxp\nqRBPBDUUA6m8EdrNTm+k3o3TnLaRYkAGxGSSmlUCgYBMe2crtomIdwe0V8babku3\nq6Te/qvIFNNv9eA2cdwRINllTkuuEJmOid3ljnQ3M4TF9mZWJC8e1x0sAYvg3EMG\nV2Dk8+2kR9Sd1Wed1F8cRZOFdh0GpALeY3Ij66Ag1Wn+SUnAEeVuAwbL6Q4iHaTS\nVf/FLyxHTdDPN3/zmrKH/Q==\n-----END PRIVATE KEY-----\n";
+  var projectId = "wani-samaj";
+  return FirestoreApp.getFirestore(email, key, projectId);
+}
+
+function myFunction() {
+  const firestore = getFirestore();
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetname = "Form Responses 1";
+  var sheet = ss.getSheetByName(sheetname);
+  const range = sheet.getDataRange();
+  const data = range.getValues();
+
+  function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [day, mnth, date.getFullYear(),].join("-");
+  }
+
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][2] != '') {
+      const primaryEmail = data[i][10];
+
+      // get family head details
+      memberData = {};
+      memberData.name = data[i][2];
+      memberData.gender = data[i][3];
+      memberData.dob = convert(data[i][4]);
+      memberData.kuldevi = data[i][5];
+      memberData.address = data[i][6];
+      memberData.area = data[i][7];
+      memberData.phoneNumber = Number(data[i][8]);
+      memberData.whatsappNumber = Number(data[i][9]);
+      memberData.email = data[i][10];
+      memberData.maritalStatus = data[i][11];
+      memberData.bloodGroup = data[i][12];
+      memberData.education = data[i][13];
+      memberData.occupation = data[i][14];
+      memberData.company = data[i][15];
+      memberData.head = true;
+      memberData.url = 'https://res.cloudinary.com/day9yxxz0/image/upload/v1696772796/profile_picture/h039naszjehbnnyv3ih0.jpg';
+
+      const address = data[i][6];
+      const kuldevi = data[i][5];
+      const area = data[i][7];
+
+      const fname = memberData.name.split(' ');
+      const uniqueDocumentId = `${fname[0]}${memberData.dob}${memberData.email}`
+      firestore.updateDocument(`Info/${uniqueDocumentId}`, memberData);
+      firestore.updateDocument(`Profiles/${primaryEmail}/Members/${uniqueDocumentId}`, memberData);
+
+
+      //get member 2 details
+      if (data[i][16] == 'Yes') {
+        memberData = {};
+        memberData.name = data[i][17];
+        memberData.gender = data[i][18];
+        memberData.dob = convert(data[i][19]);
+        memberData.phoneNumber = Number(data[i][20]);
+        memberData.whatsappNumber = Number(data[i][21]);
+        memberData.email = data[i][22];
+        memberData.maritalStatus = data[i][23];
+        memberData.bloodGroup = data[i][24];
+        memberData.education = data[i][25];
+        memberData.occupation = data[i][26];
+        memberData.company = data[i][27];
+        memberData.url = 'https://res.cloudinary.com/day9yxxz0/image/upload/v1696772796/profile_picture/h039naszjehbnnyv3ih0.jpg';
+        memberData.address = address;
+        memberData.kuldevi = kuldevi;
+        memberData.area = area;
+        memberData.head = false;
+
+        const fname = memberData.name.split(' ');
+        const uniqueDocumentId = `${fname[0]}${memberData.dob}${memberData.email}`
+
+        firestore.updateDocument(`Info/${uniqueDocumentId}`, memberData);
+        firestore.updateDocument(`Profiles/${primaryEmail}/Members/${uniqueDocumentId}`, memberData);
+      }
+
+      //get member 3 details
+      if (data[i][28] == 'Yes') {
+        memberData = {};
+        memberData.name = data[i][29];
+        memberData.gender = data[i][30];
+        memberData.dob = convert(data[i][31]);
+        memberData.phoneNumber = Number(data[i][32]);
+        memberData.whatsappNumber = Number(data[i][33]);
+        memberData.email = data[i][34];
+        memberData.maritalStatus = data[i][35];
+        memberData.bloodGroup = data[i][36];
+        memberData.education = data[i][37];
+        memberData.occupation = data[i][38];
+        memberData.company = data[i][39];
+        memberData.url = 'https://res.cloudinary.com/day9yxxz0/image/upload/v1696772796/profile_picture/h039naszjehbnnyv3ih0.jpg';
+        memberData.address = address;
+        memberData.kuldevi = kuldevi;
+        memberData.area = area;
+        memberData.head = false;
+
+        const fname = memberData.name.split(' ');
+        const uniqueDocumentId = `${fname[0]}${memberData.dob}${memberData.email}`
+
+        firestore.updateDocument(`Info/${uniqueDocumentId}`, memberData);
+        firestore.updateDocument(`Profiles/${primaryEmail}/Members/${uniqueDocumentId}`, memberData);
+      }
+
+      //get member 4 details
+      if (data[i][40] == 'Yes') {
+        memberData = {};
+        memberData.name = data[i][41];
+        memberData.gender = data[i][42];
+        memberData.dob = convert(data[i][43]);
+        memberData.phoneNumber = Number(data[i][44]);
+        memberData.whatsappNumber = Number(data[i][45]);
+        memberData.email = data[i][46];
+        memberData.maritalStatus = data[i][47];
+        memberData.bloodGroup = data[i][48];
+        memberData.education = data[i][49];
+        memberData.occupation = data[i][50];
+        memberData.company = data[i][51];
+        memberData.url = 'https://res.cloudinary.com/day9yxxz0/image/upload/v1696772796/profile_picture/h039naszjehbnnyv3ih0.jpg';
+        memberData.address = address;
+        memberData.kuldevi = kuldevi;
+        memberData.area = area;
+        memberData.head = false;
+
+        const fname = memberData.name.split(' ');
+        const uniqueDocumentId = `${fname[0]}${memberData.dob}${memberData.email}`
+
+        firestore.updateDocument(`Info/${uniqueDocumentId}`, memberData);
+        firestore.updateDocument(`Profiles/${primaryEmail}/Members/${uniqueDocumentId}`, memberData);
+      }
+    }
+  }
+}
