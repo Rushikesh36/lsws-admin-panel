@@ -70,6 +70,7 @@
                     <td>{{ item.title }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.description }}</td>
+                    <td><v-btn color="green" @click="sendTestMail(item)">Send Test Mail</v-btn></td>
                     <td><v-btn color="green" @click="sendMail(item)">Send Mail</v-btn></td>
                 </tr>
             </tbody>
@@ -105,6 +106,15 @@ export default {
         this.$store.dispatch('getNotifications');
     },
     methods: {
+        sendTestMail() {
+            let obj = {
+                name: 'Test user',
+                email: 'ambernath.wani.samaj@gmail.com'
+            }
+            let testArr = [];
+            testArr.push(obj);
+            this.sendMail(testArr);
+        },
         async sendMail(item) {
             this.dialog = true;
             console.log(this.dialog);

@@ -124,3 +124,7 @@ export const getNotifs = async() => {
   console.log(details);
   return details;
 }
+
+export const deleteNotifs = async(id) => {
+  const res = await notif.doc(id).delete();
+}
