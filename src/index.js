@@ -59,6 +59,19 @@ export const getAllInfo = async () => {
   return profileDetails;
 }
 
+export const getAllInfoForEmail = async () => {
+  let profileDetails = [];
+  const profile = await info.get();
+
+  profile.forEach(doc => {
+    profileDetails.push({ ...doc.data(), id: doc.id });
+  });
+
+  return profileDetails;
+}
+
+
+
 export const addProfile = async (obj) => {
   console.log(obj);
   const docId = `${obj.name}${obj.dob}${obj.email}`;

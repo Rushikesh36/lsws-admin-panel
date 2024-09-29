@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { getAllReceipt, setApproved, addProfile, getAllInfo, deleteMember, rejected, getResult, addMailer, getNotifs, addDocument } from './index';
+import { getAllReceipt, setApproved, addProfile, getAllInfo, deleteMember, rejected, getResult, addMailer, getNotifs, addDocument, getAllInfoForEmail } from './index';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "firebase/auth";
 import router from './router';
 import firebase from 'firebase/compat/app';
@@ -23,6 +23,7 @@ const store = createStore({
     signUpError: '',
     receipts: [],
     info: [],
+    noticeInfo: [],
     result: [],
     notifications: [],
     signInError: '',
@@ -31,6 +32,7 @@ const store = createStore({
     user: '',
   },
   actions: {
+    
     passwordReset: async ({ state }, email) => {
       console.log(state);
       sendPasswordResetEmail(auth, email).then(() => {
@@ -147,6 +149,20 @@ const store = createStore({
         };
       });
       state.info = newArray;
+      console.log('calyx store', state.info);
+    },
+    getAccountProfileDetailsForNotice: async ({ state }) => {
+      const data = await getAllInfoForEmail();
+      console.log(data);
+      const newArray = data.map(obj => {
+        return {
+          ...obj, 
+          title: `${obj.name} - ${obj.area}`,
+          value: obj.id,
+        };
+      });
+      state.noticeInfo = newArray;
+      console.log('calyx store', state.noticeInfo);
     },
     deleteProfile({state},item) {
       console.log(state);

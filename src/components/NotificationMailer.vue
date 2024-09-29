@@ -101,7 +101,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.dispatch('getAccountProfileDetails');
+        this.$store.dispatch('getAccountProfileDetailsForNotice');
         this.$store.dispatch('getNotifications');
     },
     methods: {
@@ -212,8 +212,8 @@ export default {
             return '';
         },
         info() {
-            console.log(this.$store.state.info);
-            return this.$store.state.info;
+            console.log(this.$store.state.noticeInfo);
+            return this.$store.state.noticeInfo;
         }
     }
 }
