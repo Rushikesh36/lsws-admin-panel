@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { getAllReceipt, setApproved, addProfile, getAllInfo, deleteMember, rejected, getResult, addMailer, getNotifs, addDocument, getAllInfoForEmail } from './index';
+import { getAllReceipt, setApproved, addProfile, getAllInfo, deleteMember, rejected, getResult, addMailer, getNotifs, addDocument, getAllInfoForEmail,deleteNotifs } from './index';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "firebase/auth";
 import router from './router';
 import firebase from 'firebase/compat/app';
@@ -32,7 +32,10 @@ const store = createStore({
     user: '',
   },
   actions: {
-    
+    async deleteNotifs({state}, id) {
+      console.log(state);
+      await deleteNotifs(id);
+    },
     passwordReset: async ({ state }, email) => {
       console.log(state);
       sendPasswordResetEmail(auth, email).then(() => {

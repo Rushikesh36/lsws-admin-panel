@@ -126,5 +126,5 @@ export const getNotifs = async() => {
 }
 
 export const deleteNotifs = async(id) => {
-  const res = await notif.doc(id).delete();
+  await notif.doc(id).delete();
 }

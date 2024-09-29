@@ -54,14 +54,20 @@
                     <th class="text-left font-weight-bold" width="20%">
                         Subject
                     </th>
-                    <th class="text-left font-weight-bold">
+                    <th class="text-left font-weight-bold" width="20%">
                         Date
                     </th>
-                    <th class="text-left font-weight-bold" width="50%">
+                    <th class="text-left font-weight-bold" width="30%">
                         Description
                     </th>
-                    <th class="text-left font-weight-bold">
+                    <th class="text-left font-weight-bold" width="10%">
+                        Test Mail
+                    </th>
+                    <th class="text-left font-weight-bold" width="10%">
                         Send Mail
+                    </th>
+                    <th class="text-left font-weight-bold" width="10%">
+                        Delete
                     </th>
                 </tr>
             </thead>
@@ -70,8 +76,9 @@
                     <td>{{ item.title }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.description }}</td>
-                    <td><v-btn color="green" @click="sendTestMail(item)">Send Test Mail</v-btn></td>
+                    <td><v-btn color="yellow" @click="sendTestMail(item)">Send Test Mail</v-btn></td>
                     <td><v-btn color="green" @click="sendMail(item)">Send Mail</v-btn></td>
+                    <td><v-btn color="red" @click="deleteItem(item)">Delete</v-btn></td>
                 </tr>
             </tbody>
         </v-table>
@@ -106,14 +113,59 @@ export default {
         this.$store.dispatch('getNotifications');
     },
     methods: {
-        sendTestMail() {
+    async deleteItem(id) {
+            console.log('calyx', id);
+            await this.$store.dispatch('deleteNotifs', id.id);
+            setTimeout(() => {
+                this.$store.dispatch('getNotifications');
+            }, 3000);
+        },  
+        async sendTestMail(item) {
             let obj = {
                 name: 'Test user',
                 email: 'ambernath.wani.samaj@gmail.com'
             }
             let testArr = [];
             testArr.push(obj);
-            this.sendMail(testArr);
+            console.log('calyx here', testArr);
+            this.dialog = true;
+            console.log(this.dialog);
+            let info = testArr;    
+            for (let i = 0; i < info.length; i++) {
+                this.loadingPercent = Math.ceil((i/info.length)*100);
+                console.log(this.loadingPercent);
+                let name = info[i].name;
+                let email = info[i].email;
+                let subject = item.title;
+                console.log('calyx', name, email);
+                let description = item.description;
+                let url = item.url;
+                console.log(i);
+                console.log(email);
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2MjYzZDA5NzQ1YjUwMzJlNTdmYTZlMWQwNDFiNzdhNTQwNjZkYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA3NTkwOTk0NjUyNjc5MzI5NTg0IiwiZW1haWwiOiJhbWJlcm5hdGgud2FuaS5zYW1hakBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IndyZFZmNXVDcWtpQnRXRGg4cW5IS2ciLCJuYmYiOjE2OTcyMTIzMzcsImlhdCI6MTY5NzIxMjYzNywiZXhwIjoxNjk3MjE2MjM3LCJqdGkiOiJmMWIyMTVlZTUyNjIxZjExYWVhOTg3YWE5YmU4M2QyZmM2Njg3MzM1In0.i4dMfuV6mTXFOqfp7J5VuwI7eQZ8glAUzBpn9zzsCDVk097mkltWPSxx1oojdAD4235W_RTwAyAeT3GWMG1W408KdZ_HWRCy755nTpmO_qzn7ynN2If0YWAuOZRX2pSKZmUc1I1OZtYrz9LdhmpcZNchieKe6MspoyVL30_HFryyuMy2PMGMYIEg-HU4xOAObOvTqxS5W1WjB-UjH4evNBpnv4hUsFyBoKKDaZ5cShaid_dhDbOKmnx7wjr6V3LEn8G8dARvnDaftZcvYZ6d9nl7I8WBHltuVVQ046Pl64g7qV8hS2OMxhRIMbZfJWbF17TL0cQbONrRIimAFHtd6A'
+                }
+                let body = JSON.stringify({
+                    name, email, description, url, subject
+                });
+                const apiurl = `https://us-central1-wani-samaj.cloudfunctions.net/sendEmail`;
+                await axios.post(
+                    apiurl,
+                    body,
+                    {
+                        headers: headers
+                    }
+                )
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            }
+            this.dialog = false;
         },
         async sendMail(item) {
             this.dialog = true;
@@ -126,6 +178,7 @@ export default {
                 let email = info[i].email;
                 let description = item.description;
                 let url = item.url;
+                let subject = item.title;
                 console.log(i);
                 console.log(email);
 
@@ -134,7 +187,7 @@ export default {
                     'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2MjYzZDA5NzQ1YjUwMzJlNTdmYTZlMWQwNDFiNzdhNTQwNjZkYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA3NTkwOTk0NjUyNjc5MzI5NTg0IiwiZW1haWwiOiJhbWJlcm5hdGgud2FuaS5zYW1hakBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IndyZFZmNXVDcWtpQnRXRGg4cW5IS2ciLCJuYmYiOjE2OTcyMTIzMzcsImlhdCI6MTY5NzIxMjYzNywiZXhwIjoxNjk3MjE2MjM3LCJqdGkiOiJmMWIyMTVlZTUyNjIxZjExYWVhOTg3YWE5YmU4M2QyZmM2Njg3MzM1In0.i4dMfuV6mTXFOqfp7J5VuwI7eQZ8glAUzBpn9zzsCDVk097mkltWPSxx1oojdAD4235W_RTwAyAeT3GWMG1W408KdZ_HWRCy755nTpmO_qzn7ynN2If0YWAuOZRX2pSKZmUc1I1OZtYrz9LdhmpcZNchieKe6MspoyVL30_HFryyuMy2PMGMYIEg-HU4xOAObOvTqxS5W1WjB-UjH4evNBpnv4hUsFyBoKKDaZ5cShaid_dhDbOKmnx7wjr6V3LEn8G8dARvnDaftZcvYZ6d9nl7I8WBHltuVVQ046Pl64g7qV8hS2OMxhRIMbZfJWbF17TL0cQbONrRIimAFHtd6A'
                 }
                 let body = JSON.stringify({
-                    name, email, description, url
+                    name, email, description, url, subject
                 });
                 const apiurl = `https://us-central1-wani-samaj.cloudfunctions.net/sendEmail`;
                 await axios.post(
