@@ -312,6 +312,15 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 600px) {
+    
+    .section {
+    margin: 5% 5%;
+    border: 2px solid black;
+    padding: 1%;
+}
+    }
+
 .section {
     margin: 2% 25%;
     border: 2px solid black;

@@ -193,6 +193,14 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 600px) {
+    
+.center-form {
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+}
+
 .center-form {
     margin-left: 25vw;
     margin-right: 25vw;
