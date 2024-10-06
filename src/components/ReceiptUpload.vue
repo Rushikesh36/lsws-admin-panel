@@ -164,7 +164,7 @@ export default {
                 textArea: [v => !!v || 'Please Enter the name of Person to whom cash was handed.'],
             },
             obj: {
-                vargani: 700,
+                vargani: 1100,
                 others: 0,
                 total: 0,
                 shulk: 0,
@@ -194,7 +194,7 @@ export default {
         handleReset() {
             this.$refs.form.reset()
             this.$refs.form.resetValidation();
-            this.obj.vargani = 700;
+            this.obj.vargani = 1100;
             this.obj.others = 0;
             this.obj.total = 0;
             this.obj.shulk = 0;
