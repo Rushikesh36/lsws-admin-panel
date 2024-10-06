@@ -48,6 +48,17 @@ export const getResult = async (year) => {
   return resultDetails;
 }
 
+export const getDocument = async (year) => {
+  const resultDetails = [];
+  const res = await documentCollection.where('type','==','others').where('year','==',year).get()
+  console.log(res);
+  res.forEach(doc => {
+    resultDetails.push({ ...doc.data(), id: doc.id });
+  });
+  console.log('docs',resultDetails);
+  return resultDetails;
+}
+
 export const getAllInfo = async () => {
   let profileDetails = [];
   const profile = await info.where('head','==',true).get();
@@ -123,6 +134,30 @@ export const getNotifs = async() => {
   });
   console.log(details);
   return details;
+}
+
+export const getNums = async() => {
+  const details = [];
+  const details2 = [];
+  let obj = {
+    head: 0,
+    members: 0
+  };
+
+  const res = await info.get();
+  res.forEach(doc => {
+    //console.log('calyx doc', doc)
+    details.push(doc.id);
+  });
+  obj.members = details.length;
+  const res2 = await info.where('head', '==', true).get();
+  res2.forEach(doc => {
+    //console.log('calyx doc', doc)
+    details2.push(doc.id);
+  });
+  obj.head = details2.length
+  console.log('calyx count', obj);
+  return obj;
 }
 
 export const deleteNotifs = async(id) => {

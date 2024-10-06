@@ -1,7 +1,14 @@
 <template>
     <v-card color="primary" title="HOME PAGE" class="text-center header-card"></v-card>
+    <div class="mt-4 text-center">
+        <v-chip class="mr-6" size="x-large" variant="outlined" color="success">Total Families enrolled : <b> {{ nums.head }}</b></v-chip>
+        <v-chip class="" size="x-large" variant="outlined" color="blue">Total Members enrolled : <b> {{ nums.members }}</b></v-chip>
+    </div>
+    
     <div class="d-flex row home-card mt-8">
+        
         <div class="col-md-6">
+           
             <router-link to="/addProfile">
                 <v-hover v-slot="{ isHovering, props }" open-delay="100">
                     <v-card :elevation="isHovering ? 16 : 2" :class="{ 'on-hover': isHovering }" class="mx-auto"
@@ -62,6 +69,16 @@
 </template>
 
 <script>
+export default {
+    computed: {
+        nums() {
+            return this.$store.state.dashboard;
+        }
+    },
+    mounted() {
+        this.$store.dispatch('getNums');
+    }
+}
 
 </script>
 

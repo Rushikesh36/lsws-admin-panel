@@ -39,6 +39,11 @@
             <a class="nav-link" href="#">Add Receipt</a>
           </li>
         </router-link>
+        <router-link to="/showDocument">
+          <li class="nav-item">
+            <a class="nav-link" href="#">View Documents</a>
+          </li>
+        </router-link>
         <li class="nav-item">
             <a class="nav-link" href="https://drive.google.com/drive/folders/1akdxr_iDR-zN2HKBZ86tZo_OERSqzc59">Documents</a>
           </li>

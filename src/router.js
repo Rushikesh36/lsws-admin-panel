@@ -5,6 +5,7 @@ import ReceiptApproval from './components/ReceiptApproval';
 import AddUser from './components/AddUser';
 import DeleteProfile from './components/DeleteProfile';
 import ResultShow from './components/ResultShow';
+import ShowDocument from './components/DocumentShow';
 import Notifications from './components/NotificationMailer';
 import HomePage from './components/HomePage';
 import ReceiptUploadPage from '../src/components/ReceiptUpload';
@@ -22,6 +23,7 @@ const router = createRouter({
         { path: '/result', component: ResultShow},
         { path: '/notifications', component: Notifications},
         { path: '/', component: HomePage},
+        { path: '/showDocument', component: ShowDocument},
         { path: '/:notfound', redirect: '/'},
     ],
     scrollBehavior(to) {
